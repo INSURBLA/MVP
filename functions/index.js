@@ -20,6 +20,7 @@ const {WebhookClient} = require('dialogflow-fulfillment');
 // Add the Firebase products that you want to use
 require("firebase/auth");
 require("firebase/firestore");
+//ppruebas
 
 // initialise DB connection
 const admin = require('firebase-admin');
@@ -51,9 +52,9 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     const tVehiculo = agent.parameters.tipo_vehiculo;
 
     agent.add(`Registramos su` + tVehiculo);
-	
-	
-	
+
+
+
     return admin.database().ref('tipo_vehiculo').transaction((tipo_vehiculo) => {
       if(tipo_vehiculo !== null) {
         tipo_vehiculo.tipo = tVehiculo;
@@ -61,7 +62,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       return tipo_vehiculo;
     }, function(error, isSuccess) {
       console.log('Update average age transaction success: ' + isSuccess);
-    });	
+    });
 
   }
 
