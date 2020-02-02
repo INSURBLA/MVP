@@ -30,7 +30,6 @@ admin.initializeApp({
 });
 
 const app = dialogflow({debug: true});
-/*-*/
 
 /*
 //Functions
