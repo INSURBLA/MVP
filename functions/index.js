@@ -52,9 +52,24 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
   }
 
+  function f_matricula(agent) {
+    const p_imatricula = agent.parameters.p_matricula;
+
+    return admin.database().ref('siniestro').transaction((siniestro) => {
+      if(siniestro !== null) {
+        siniestro.matricula_titular = p_imatricula;
+      }
+      return siniestro;
+    }, function(error, isSuccess) {
+      console.log('Update matricula titular success: ' + isSuccess);
+    });
+
+  }
+
   // Run the proper function handler based on the matched Dialogflow intent name
   let intentMap = new Map();
   intentMap.set('Inicio - Si', f_consentimiento);
+  intentMap.set('Siniestro - Si matricula', f_matricula);
   agent.handleRequest(intentMap);
 });
 
