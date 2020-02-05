@@ -38,20 +38,22 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
   console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
 
+  //Funcion para grabar el consentimiento del tratamiento de datos
   function f_consentimiento(agent) {
     const p_consiente = agent.parameters.p_aceptar;
 
-    return admin.database().ref('tratamiento_datos').transaction((tratamiento_datos) => {
-      if(tratamiento_datos !== null) {
-        tratamiento_datos.consiente = p_consiente;
+    return admin.database().ref('siniestro').transaction((siniestro) => {
+      if(siniestro !== null) {
+        siniestro.tratamiento_datos = p_consiente;
       }
-      return tratamiento_datos;
+      return siniestro;
     }, function(error, isSuccess) {
       console.log('Update consentimiento success: ' + isSuccess);
     });
 
   }
 
+  //Funcion para grabar la matricula del titular
   function f_matricula(agent) {
     const p_imatricula = agent.parameters.p_matricula;
 
@@ -66,10 +68,26 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
   }
 
+  //Funcion para grabar la localizacion del siniestro
+  function f_localizacion(agent) {
+    const p_localizacion = agent.parameters.p_l_siniestro;
+
+    return admin.database().ref('siniestro').transaction((siniestro) => {
+      if(siniestro !== null) {
+        siniestro.localizacion = p_localizacion;
+      }
+      return siniestro;
+    }, function(error, isSuccess) {
+      console.log('Update localizacion siniestro success: ' + isSuccess);
+    });
+
+  }
+
   // Run the proper function handler based on the matched Dialogflow intent name
   let intentMap = new Map();
   intentMap.set('Inicio - Si', f_consentimiento);
   intentMap.set('Siniestro - Si matricula', f_matricula);
+  intentMap.set('Siniestro - Localizacion si', f_localizacion);
   agent.handleRequest(intentMap);
 });
 
