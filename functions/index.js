@@ -85,9 +85,9 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
   // Run the proper function handler based on the matched Dialogflow intent name
   let intentMap = new Map();
-  intentMap.push('Inicio - Si', f_consentimiento);
-  intentMap.push('Siniestro - Si matricula', f_matricula);
-  intentMap.push('Siniestro - Localizacion si', f_localizacion);
+  intentMap.set('Inicio - Si', f_consentimiento);
+  intentMap.set('Siniestro - Si matricula', f_matricula);
+  intentMap.set('Siniestro - Localizacion si', f_localizacion);
   agent.handleRequest(intentMap);
 });
 
